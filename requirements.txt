@@ -1,0 +1,2 @@
+django~=4.1
+pandas~=2.1.1
