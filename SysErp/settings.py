@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
     'unfold',
     'orderItem.apps.OrderitemConfig',
     'django.contrib.admin',

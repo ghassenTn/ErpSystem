@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import Product, Order, Validate, Prepare, ProductAvailability, Invoice, Aprovisinenemt, Test
+from .models import Product, Order, Validate, Prepare, ProductAvailability, Invoice, Aprovisinenemt, Test, InformeClient
 import pandas as pd
 from django.http import HttpResponse
-from tkinter import messagebox
 from django.utils import timezone
 
 
@@ -52,4 +51,5 @@ admin.site.register(ProductAvailability)
 admin.site.register(Invoice)
 admin.site.register(Aprovisinenemt)
 admin.site.register(Test)
+admin.site.register(InformeClient)
 # Register your models here.

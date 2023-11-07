@@ -65,6 +65,16 @@ class Prepare(models.Model):
         return self.order.order.customer_name
 
 
+class InformeClient(models.Model):
+    order = models.OneToOneField(Validate, on_delete=models.CASCADE, limit_choices_to={'status': 'Refuser'})
+    date_informe = models.DateTimeField()
+    raison = models.CharField(max_length=200)
+    preparer = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='informed_client', null=True)
+
+    def __str__(self):
+        return f'{self.order.order.customer_name}  ||  {self.order.order.products.name}  ||  raison : {self.raison}'
+
+
 class Invoice(models.Model):
     Payment_CHOICES = [
         ('Paye', 'Paye'),
