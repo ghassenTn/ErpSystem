@@ -2,11 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Erp System</title>
+    <title>ERP System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .category-frame {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .category-name {
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .product-details {
+            margin-bottom: 15px;
+        }
+        .product-name {
+            font-weight: bold;
+        }
+        .product-price {
+            color: green;
+        }
+        .product-quantity {
+            color: #555;
+        }
+        .product-reference {
+            color: #888;
+        }
+        .category-frame {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        .category-name {
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+            width: 100%;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .product-details {
+            width: 250px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .product-name {
+            font-weight: bold;
+        }
+        .product-price {
+            color: green;
+        }
+        .product-quantity {
+            color: #555;
+        }
+        .product-reference {
+            color: #888;
+        }
+    </style>
 </head>
 <body>
-<h1>
-    First Erp system
-</h1>
+    <div id="product-display"></div>
+
+    <script>
+        const products = [
+            {% for foo in product %}
+                {
+                    name: '{{ foo.name }}',
+                    price: '{{ foo.prix }}',
+                    quantity: '{{ foo.quantity_available }}',
+                    reference: '{{ foo.reference }}',
+                    category: '{{ foo.category }}'
+                },
+            {% endfor %}
+        ];
+
+        const productsByCategory = {};
+        products.forEach(product => {
+            const { category } = product;
+            if (!productsByCategory[category]) {
+                productsByCategory[category] = [];
+            }
+            productsByCategory[category].push(product);
+        });
+
+        const productDisplay = document.getElementById('product-display');
+        for (const category in productsByCategory) {
+            const categoryProducts = productsByCategory[category];
+            const categoryFrame = document.createElement('div');
+            categoryFrame.classList.add('category-frame');
+
+            const categoryName = document.createElement('div');
+            categoryName.classList.add('category-name');
+            categoryName.textContent = category;
+            categoryFrame.appendChild(categoryName);
+
+            categoryProducts.forEach(product => {
+                const productDetails = document.createElement('div');
+                productDetails.classList.add('product-details');
+                productDetails.innerHTML = `
+                    <p class="product-name">${product.name}</p>
+                    <p class="product-price">Price: ${product.price}</p>
+                    <p class="product-quantity">Available Quantity: ${product.quantity}</p>
+                    <p class="product-reference">Reference: ${product.reference}</p>
+                `;
+                categoryFrame.appendChild(productDetails);
+            });
+
+            productDisplay.appendChild(categoryFrame);
+        }
+    </script>
 </body>
 </html>

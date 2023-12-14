@@ -1,6 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser, Group, Permission
+from django.dispatch import receiver
 from django.utils import timezone
+from django.contrib.auth.hashers import make_password
+from django.db.models.signals import pre_delete
+
+from SysErp import settings
 
 
 class Product(models.Model):
@@ -84,20 +89,19 @@ class Invoice(models.Model):
     order = models.OneToOneField(Prepare, on_delete=models.CASCADE)
     price = models.IntegerField(default=0)  # Initialize the price with 0 initially
     invoice_date = models.DateTimeField(default=timezone.now)  # Add a default value for invoice date
-    payment_status = models.CharField(
+    C = models.CharField(
         max_length=10,
         choices=Payment_CHOICES,
         default='pending'  # You can set a default status if needed
     )
 
     def save(self, *args, **kwargs):
-        # Calculate the price based on the associated Order's product and quantity
         self.price = self.order.order.order.products.prix * self.order.order.order.quantity
         super(Invoice, self).save(*args, **kwargs)
 
     def __str__(self):
         return (f'Client: {self.order.order.order.customer_name} || Product: {self.order.order.order.products.name} || '
-                f'Quantity: {self.order.order.order.quantity} ||  Price : {self.price}  || Payment_status : {self.payment_status}')
+                f'Quantity: {self.order.order.order.quantity} ||  Price : {self.price}  || Payment_status : {self.C}')
 
 
 class ProductAvailability(models.Model):
@@ -119,3 +123,11 @@ class Aprovisinenemt(models.Model):
 
     def __str__(self):
         return self.order.order.customer_name
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
